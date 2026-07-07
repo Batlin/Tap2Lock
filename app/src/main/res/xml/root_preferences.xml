@@ -6,15 +6,17 @@
         android:key="accessibility_not_granted_warning"
         android:title="@string/settings_permissions_not_granted_title"
         android:summary="@string/settings_permissions_not_granted_summary"
-        android:icon="@drawable/settings_permissions_warning"
-        android:visible="false" />
+        android:icon="@drawable/settings_permissions"
+        android:layout="@layout/ko_card"
+        />
 
     <Preference
         android:key="accessibility_granted_message"
         android:title="@string/settings_permissions_granted_title"
-        android:icon="@drawable/settings_permissions_ok"
+        android:icon="@drawable/settings_permissions"
         android:selectable="false"
-        android:visible="false" />
+        android:layout="@layout/ok_card"
+        />
 
     <PreferenceCategory
         android:title="@string/settings_category_gestures"

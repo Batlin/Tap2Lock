@@ -5,28 +5,26 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
 
-    <!-- Agrupamos el diseño aplicando el escalado y recentrado para el padding de seguridad -->
+    <!-- Agrupamos el diseño aplicando el escalado (0.60) y centrado para la Safe Zone adaptativa -->
     <group
         android:pivotX="12"
         android:pivotY="12"
         android:scaleX="0.60"
-        android:scaleY="0.60"
-        android:translateX="0"
-        android:translateY="0">
+        android:scaleY="0.60">
 
-        <!-- Ondas Doble Tap (Líneas limpias, sin sombras) -->
+        <!-- Ondas Doble Tap: En azul pastel (Material Accent) para resaltar la acción del gesto -->
         <path
             android:fillColor="#00000000"
             android:strokeColor="#A8C7FA"
-            android:strokeWidth="1.5"
+            android:strokeWidth="1.8"
             android:strokeLineCap="round"
             android:pathData="M 6,5 C 5.5,6 5.5,7 6,8 M 3,4 C 1.8,6 1.8,8 3,10" />
 
-        <!-- Mano (Líneas limpias, sin sombras) -->
+        <!-- Mano gesticulando: En gris claro (Material On-Surface inverse) para un contraste suave y limpio -->
         <path
             android:fillColor="#00000000"
-            android:strokeColor="#A8C7FA"
-            android:strokeWidth="1.5"
+            android:strokeColor="#E6E1E5"
+            android:strokeWidth="1.8"
             android:strokeLineJoin="round"
             android:strokeLineCap="round"
             android:pathData="M 10,9 V 4.5 C 10,3.7 10.7,3 11.5,3 C 12.3,3 13,3.7 13,4.5 V 11.5 M 13,9.5 C 13,8.7 13.7,8 14.5,8 C 15.3,8 16,8.7 16,9.5 V 11.5 M 16,10 C 16,9.2 16.7,8.5 17.5,8.5 C 18.3,8.5 19,9.2 19,10 V 12 M 19,11 C 19,10.2 19.7,9.5 20.5,9.5 C 21.3,9.5 22,10.2 22,11 V 15 C 22,18.5 19,21 15.5,21 H 13.5 C 11,21 9,19.5 8,17.5 L 5.5,13 C 5.2,12.5 5.4,11.8 6,11.5 C 6.6,11.2 7.3,11.4 7.6,12 L 10,15" />

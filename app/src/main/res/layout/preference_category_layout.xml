@@ -5,9 +5,9 @@
     android:layout_height="wrap_content"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
-    android:paddingTop="24dp"
+    android:paddingTop="16dp"
     android:paddingBottom="8dp"
     android:textColor="?android:attr/textColorPrimary"
-    android:textSize="22sp"
+    android:textSize="20sp"
     android:textStyle="normal"
     />

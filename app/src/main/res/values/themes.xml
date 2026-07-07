@@ -8,4 +8,13 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
     </style>
 
+    <style name="Theme.Tap2Lock.CardPreference.Error" parent="Theme.Tap2Lock" >
+        <item name="cardBackgroundColor">#FCE8E6</item>
+        <item name="colorOnErrorContainer">#C5221F</item>
+    </style>
+
+    <style name="Theme.Tap2Lock.CardPreference.Success" parent="Theme.Tap2Lock">
+        <item name="cardBackgroundColor">#E6F4EA</item>
+        <item name="colorOnErrorContainer">#137333</item>
+    </style>
 </resources>
