@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Tap2Lock</string>
+    <string name="accessibility_service_description">Permite bloquear la pantalla haciendo doble tap en cualquier lugar</string>
+    <string name="accesibility_service_property">Bloqueo de pantalla vía doble tap</string>
+    <string name="tile_label">Tap2Lock</string>
+    <string name="alertdialog_title">Permiso requerido</string>
+    <string name="alertdialog_message">Para poder gestionar el doble tap, concede por favor los permisos de accesibilidad</string>
+    <string name="alertdialog_positive_button">Ir a ajustes</string>
+    <string name="alertdialog_negative_button">Cancelar</string>
+
+    <string name="settings_name">Ajustes Tap2Lock</string>
+    <string name="settings_permissions_granted_title">Permisos correctos</string>
+    <string name="settings_permissions_granted_summary">El servicio de accesibilidad está habilitado.</string>
+    <string name="settings_permissions_not_granted_title">Permisos insuficientes</string>
+    <string name="settings_permissions_not_granted_summary">El servicio de accesibilidad está deshabilitado.\nPulsa aquí para conceder los permisos necesarios y permitir el doble tap</string>
+
+    <string name="settings_category_gestures">Configuración de gestos</string>
+    <string name="settings_doubletap_interval_title">Sensibilidad del doble tap</string>
+    <string name="settings_doubletap_interval_summary">Valor recomendado: 200ms\nValor actual: %d ms</string>
+
+    <string name="settings_category_app_filter">Filtro de aplicaciones</string>
+    <string name="settings_app_filter_title">Aplicaciones permitidas</string>
+    <string name="settings_app_filter_summary">Selecciona en qué Launchers o aplicaciones quieres poder hacer el doble tap</string>
+    <string name="settings_app_filter_dialog_title">Aplicaciones seleccionadas</string>
+    <string name="settings_lockscreen_filter_title">Pantalla de bloqueo</string>
+    <string name="settings_lockscreen_filter_summary">Permitir doble tap</string>
+
+    <string name="settings_category_about">Acerca de...</string>
+    <string name="settings_app_version_title">Versión de la aplicación</string>
+    <string name="settings_version_not_available">No se puede recuperar la versión de la app</string>
+    <string name="settings_app_source_code_title">Código fuente en GitHub</string>
+    <string name="settings_app_source_code_summary">Accede al repositorio de código y colabora</string>
+
+</resources>

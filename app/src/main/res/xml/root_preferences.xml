@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:key="accessibility_not_granted_warning"
+        android:title="@string/settings_permissions_not_granted_title"
+        android:summary="@string/settings_permissions_not_granted_summary"
+        android:icon="@drawable/settings_permissions_warning"
+        android:visible="false" />
+
+    <Preference
+        android:key="accessibility_granted_message"
+        android:title="@string/settings_permissions_granted_title"
+        android:icon="@drawable/settings_permissions_ok"
+        android:selectable="false"
+        android:visible="false" />
+
+    <PreferenceCategory
+        android:title="@string/settings_category_gestures"
+        android:layout="@layout/preference_category_layout"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false" >
+
+        <SeekBarPreference
+            android:key="double_tap_timeout"
+            android:title="@string/settings_doubletap_interval_title"
+            android:defaultValue="200"
+            android:max="400"
+            android:icon="@drawable/settings_gesture_mobile_hand" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_category_app_filter"
+        android:layout="@layout/preference_category_layout"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false" >
+
+        <MultiSelectListPreference
+            android:key="whitelist_packages"
+            android:title="@string/settings_app_filter_title"
+            android:summary="@string/settings_app_filter_summary"
+            android:dialogTitle="@string/settings_app_filter_dialog_title"
+            android:icon="@drawable/settings_app_filter" />
+
+        <SwitchPreferenceCompat
+            android:key="whitelist_lockscreen"
+            android:title="@string/settings_lockscreen_filter_title"
+            android:summary="@string/settings_lockscreen_filter_summary"
+            android:defaultValue="false"
+            android:icon="@drawable/settings_lockscreen_filter" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_category_about"
+        android:layout="@layout/preference_category_layout"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false" >
+
+        <Preference
+            android:key="app_version"
+            android:title="@string/settings_app_version_title"
+            android:summary=""
+            android:selectable="false"
+            android:icon="@drawable/settings_info"
+            />
+
+        <Preference
+            android:title="@string/settings_app_source_code_title"
+            android:summary="@string/settings_app_source_code_summary"
+            android:icon="@drawable/settings_code_repository" >
+            <intent android:action="android.intent.action.VIEW" android:data="https://github.com/Batlin/Tap2Lock" />
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
