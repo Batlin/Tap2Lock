@@ -37,7 +37,7 @@ public class TouchBlockerService extends AccessibilityService {
         return prefs.getInt("double_tap_timeout", 200);
     }
 
-    private boolean isCurrentPackageWhiteListed(String currentPackage) {
+    private boolean isForegroundAppWhiteListed(String packageToEvaluate) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // 1. Creamos nuestro conjunto por defecto (whitelist inicial)
@@ -48,7 +48,7 @@ public class TouchBlockerService extends AccessibilityService {
 
         boolean isDoubleTapInLockscreenEnabled = prefs.getBoolean("whitelist_lockscreen", false);
 
-        Log.d(TAG, "currentPackageName: " + currentPackageName);
+        Log.d(TAG, "packageToEvaluate: " + packageToEvaluate);
         Log.d(TAG, "whiteListPackagesNames: " + whitelist);
         Log.d(TAG,"isDoubleTapInLockscreenEnabled: " + isDoubleTapInLockscreenEnabled);
 
@@ -59,7 +59,7 @@ public class TouchBlockerService extends AccessibilityService {
         if (km.isKeyguardLocked()) {
             return isDoubleTapInLockscreenEnabled;
         } else {
-            return whitelist.contains(currentPackage);
+            return whitelist.contains(packageToEvaluate);
         }
     }
 
@@ -68,20 +68,6 @@ public class TouchBlockerService extends AccessibilityService {
         super.onServiceConnected();
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-
-        // Inicializamos el detector de gestos nativo de Android
-        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                Log.d(TAG, "onDoubleTap");
-
-                // Al detectar el doble toque, disparamos la acción global de bloqueo
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN);
-                }
-                return true;
-            }
-        });
 
         // Creamos una vista vacía (un contenedor transparente)
         overlayView = new View(this);
@@ -112,11 +98,6 @@ public class TouchBlockerService extends AccessibilityService {
         overlayView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-                //Log.d(TAG, "onTouch");
-                // 1. El detector analiza si es un doble tap en segundo plano
-                gestureDetector.onTouchEvent(event);
-
                 long currentTime = System.currentTimeMillis();
 
                 if (currentTime - lastClickTime < getCustomDoubleTapTimeout()) {
@@ -137,32 +118,45 @@ public class TouchBlockerService extends AccessibilityService {
         Log.d(TAG, "onServiceConnected");
     }
 
+    private boolean isSystemUI(String packageName) {
+        return "com.android.systemui".equals(packageName);
+    }
+
     private boolean isSystemUI(AccessibilityEvent event) {
-        return event.getPackageName().toString().equals("com.android.systemui");
+        return event.getPackageName() != null && isSystemUI(event.getPackageName().toString());
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        //Log.d(TAG, "onAccessibilityEvent " + event);
-
-        // TYPE_WINDOW_STATE_CHANGED se dispara cada vez que el usuario abre otra app o vuelve al inicio
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            if (event.getPackageName() != null) {
-                // Guardamos el nombre del paquete anterior (que esté whitelisted) y que se le ponga delante com.android.systemui
-                // O sucesivos com.android.systemui
-                if(currentPackageName != null && (isCurrentPackageWhiteListed(currentPackageName) || isSystemUI(event)) && isSystemUI(event) ) {
-                    if(isCurrentPackageWhiteListed(currentPackageName))
-                        lastPackageNameDifferentFromSystemUI = currentPackageName;
+            if (event.getPackageName() == null) return;
 
-                    Log.d(TAG, "Guardamos lastPackageNameDifferentFromSystemUI: " + lastPackageNameDifferentFromSystemUI);
-                } else {
-                    lastPackageNameDifferentFromSystemUI = null;
+            String newPackageName = event.getPackageName().toString();
+
+            // ESCENARIO A: El evento actual es de SystemUI (Barra de notificaciones, volumen, etc.)
+            if (isSystemUI(newPackageName)) {
+                // Solo guardamos el paquete anterior si veníamos de una app REAL (no SystemUI) y esa app estaba en la whitelist
+                if (currentPackageName != null && !isSystemUI(currentPackageName)) {
+                    if (isForegroundAppWhiteListed(currentPackageName)) {
+                        lastPackageNameDifferentFromSystemUI = currentPackageName;
+                        Log.d(TAG, "SystemUI se ha colado delante. Guardamos la app real subyacente: " + lastPackageNameDifferentFromSystemUI);
+                    }
                 }
-                // Guardamos el nombre del paquete actual (ej: "com.android.launcher3", "com.whatsapp", etc.)
-                currentPackageName = event.getPackageName().toString();
-                Log.d(TAG, "currentPackageName: " + currentPackageName + ", className: " + event.getClassName());
-                Log.d(TAG, "lastPackageNameDifferentFromSystemUI: "+ lastPackageNameDifferentFromSystemUI);
+                // NOTA: No limpiamos 'lastPackageNameDifferentFromSystemUI' en el else de aquí
+                // para que sucesivos eventos de SystemUI no borren la app que guardamos primero.
             }
+            // ESCENARIO B: El usuario ha cambiado a otra aplicación real (Launcher, WhatsApp, etc.)
+            else {
+                // Como ya estamos en una app real, limpiamos el "salvavidas" de SystemUI
+                lastPackageNameDifferentFromSystemUI = null;
+                Log.d(TAG, "Nueva app real enfocada: " + newPackageName);
+            }
+
+            // Finalmente, actualizamos el paquete actual
+            currentPackageName = newPackageName;
+
+            Log.d(TAG, "Estado actual -> currentPackageName: " + currentPackageName
+                    + " | lastRealApp: " + lastPackageNameDifferentFromSystemUI);
         }
     }
 
@@ -172,8 +166,11 @@ public class TouchBlockerService extends AccessibilityService {
     private void lockScreen() {
         Log.d(TAG, "lockScreen");
 
+        // Si la app en primer plano es SystemUI, miramos la app real que estaba justo debajo
+        String foregroundApp = isSystemUI(currentPackageName) ? lastPackageNameDifferentFromSystemUI : currentPackageName;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            if (isCurrentPackageWhiteListed(currentPackageName) || isCurrentPackageWhiteListed(lastPackageNameDifferentFromSystemUI)) {
+            if (isForegroundAppWhiteListed(foregroundApp)) {
                 performGlobalAction(GLOBAL_ACTION_LOCK_SCREEN);
             }
         }
