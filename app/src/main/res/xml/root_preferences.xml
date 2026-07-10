@@ -29,6 +29,7 @@
             android:title="@string/settings_doubletap_interval_title"
             android:defaultValue="200"
             android:max="400"
+            android:selectable="false"
             android:icon="@drawable/settings_gesture_mobile_hand" />
 
     </PreferenceCategory>
@@ -51,7 +52,8 @@
             android:title="@string/settings_lockscreen_filter_title"
             android:summary="@string/settings_lockscreen_filter_summary"
             android:defaultValue="false"
-            android:icon="@drawable/settings_lockscreen_filter" />
+            android:icon="@drawable/settings_lockscreen_filter"
+            app:widgetLayout="@layout/preference_switch" />
 
     </PreferenceCategory>
 
