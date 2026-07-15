@@ -23,7 +23,7 @@
             android:name="com.blogspot.androidinspain.tap2lock.PermissionActivity"
             android:excludeFromRecents="true"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
+            android:theme="@style/Theme.Material3Expressive.DayNight.Dialog.Alert" />
 
         <activity
             android:name="com.blogspot.androidinspain.tap2lock.SettingsActivity"

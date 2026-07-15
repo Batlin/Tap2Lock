@@ -7,6 +7,8 @@ import android.provider.Settings;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 public class PermissionActivity extends Activity {
 
     @Override
@@ -17,7 +19,7 @@ public class PermissionActivity extends Activity {
     }
 
     private void showAccesibilityPermissionsDialog() {
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.alertdialog_title))
                 .setMessage(getString(R.string.alertdialog_message))
                 .setPositiveButton(getString(R.string.alertdialog_positive_button), (dialog, which) -> {
